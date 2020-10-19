@@ -1,11 +1,39 @@
-<ngx-form-builder [schema]="schema" (schemaParsed)="registrationForm = $event">
-        <ng-template #TextEl let-name="name" let-formControl="formControl">
-            <ng-container [ngSwitch]="name">
-                <input *ngSwitchCase="'username'" type="text" [formControl]="formControl" placeholder="Enter value">
-                <mat-form-field *ngSwitchCase="'password'">
-                    <mat-label>Password</mat-label>
-                    <input matInput type="password">
-                </mat-form-field>
-            </ng-container>
-        </ng-template>
-</ngx-form-builder>
+<div class="container mt-5">
+  <h1 class="mat-h1">Dynamic form example</h1>
+  <ngx-form-builder class="row" [schema]="schema" (schemaParsed)="registrationForm = $event">
+    <ng-template #TextEl let-control>
+      <mat-form-field [class]="control.classList">
+        <mat-label>{{control?.extras?.label}}</mat-label>
+        <input [placeholder]="control?.extras?.placeholder" matInput [formControl]="control?.formControl">
+      </mat-form-field>
+    </ng-template>
+    <ng-template #SelectEl let-control>
+      <mat-form-field [class]="control.classList">
+        <mat-label>{{control?.extras?.label}}</mat-label>
+        <mat-select [placeholder]="control?.extras?.placeholder" [formControl]="control.formControl">
+          <mat-option [value]="option" *ngFor="let option of control.options">{{option}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-template>
+  </ngx-form-builder>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-12">{{
+       registrationForm?.value | json
+     }}</div>
+  </div>
+</div>
+<!-- <ng-template #TextEl let-control>
+  <ng-container [ngSwitch]="control.name">
+    <mat-form-field *ngSwitchCase="'zipCode'" [class]="control.classList">
+      <mat-label>{{control?.extras?.label}}</mat-label>
+      <input [placeholder]="control?.extras?.placeholder" matInput [formControl]="control?.formControl">
+      <mat-icon matSuffix>edit</mat-icon>
+    </mat-form-field>
+    <mat-form-field *ngSwitchDefault [class]="control.classList">
+      <mat-label>{{control?.extras?.label}}</mat-label>
+      <input [placeholder]="control?.extras?.placeholder" matInput [formControl]="control?.formControl">
+    </mat-form-field>
+  </ng-container>
+</ng-template> -->
